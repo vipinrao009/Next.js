@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
   const user: User = session?.user as User; // Assertion => not clear yet please clear the doubt
 
-  if (!session?.user || session) {
+  if (!session || !session.user) {
     return Response.json(
       {
         success: false,
@@ -65,7 +65,7 @@ export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
 
-  if (!session || session.user) {
+  if (!session || !session.user) {
     return Response.json(
       {
         success: false,
