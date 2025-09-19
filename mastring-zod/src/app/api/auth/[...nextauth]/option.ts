@@ -18,8 +18,8 @@ export const authOptions: NextAuthOptions = {
         try {
           const user = await UserModel.findOne({
             $or: [
-              { email: credentials.identifier.email },
-              { username: credentials.identifier.username },
+              { email: credentials.identifier },
+              { username: credentials.identifier },
             ],
           });
           if (!user) {
@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Please verify the email before login");
           }
           const isPasswordCorrect = await bcrypt.compare(
-            credentials.identifier.password,
+            credentials.password,
             user.password
           ); // yha par password directly mil jate hai hame identifire use kaene ki need nahi padti hai
 
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token._id = user._id?.toString(); // yaha par directly _id accept nahi karega hame types me jaker define karana padega
         token.isVerified = user.isVerified;
-        token.isAcceptingMessages = user.isAcceptingMessages;
+        token.isAcceptingMessage = user.isAcceptingMessage;
         token.username = user.username;
       }
       return token;
@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
-        session.user.isAcceptingMessages = token.isAcceptingMessages;
+        session.user.isAcceptingMessage = token.isAcceptingMessage;
         session.user.username = token.username;
       }
       return session;
