@@ -9,6 +9,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { verifySchema } from "@/schemas/verifySchema";
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +27,7 @@ import { toast } from "react-toastify";
 import * as z from "zod";
 
 const VerifyAccount = () => {
-  const [isVerifying, setIsVerifying] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(false);
   const params = useParams();
   const router = useRouter();
 
@@ -31,7 +37,7 @@ const VerifyAccount = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
-    setIsVerifying(true)
+    setIsVerifying(true);
     try {
       const response = await axios.post(`/api/verify-code`, {
         username: params.username,
@@ -42,14 +48,14 @@ const VerifyAccount = () => {
         toast.success(response?.data.message);
       }
       router.replace("/sign-in");
-      setIsVerifying(false)
+      setIsVerifying(false);
     } catch (error) {
       console.log("Error in signup of user");
       const AxiosError = error as AxiosError<ApiResponse>;
       let Error = AxiosError.response?.data.message;
       toast.error(Error);
-    }finally{
-        setIsVerifying(false)
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -63,28 +69,42 @@ const VerifyAccount = () => {
 
         <div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col items-center justify-center">
               <FormField
                 control={form.control}
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Verification Code</FormLabel>
                     <FormControl>
-                      <Input placeholder="code" {...field} />
+                      <InputOTP maxLength={6} {...field}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                        </InputOTPGroup>
+                        <InputOTPSeparator />
+                        <InputOTPGroup>
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
+                        </InputOTPGroup>
+                      </InputOTP>
                     </FormControl>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <div className="flex justify-center">
-                <Button disabled={isVerifying} type="submit">{ isVerifying ? (
+                <Button disabled={isVerifying} type="submit">
+                  {isVerifying ? (
                     <>
-                    <Loader/> Please wait
+                      <Loader /> Please wait
                     </>
-                ) : ("Verify Account")}</Button>
-              </div> 
+                  ) : (
+                    "Verify Account"
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
         </div>
