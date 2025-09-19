@@ -8,10 +8,9 @@ export async function middleware(request: NextRequest) {
 
     if(token &&
         (
-            url.pathname.startsWith('/sigh-in') ||
-            url.pathname.startsWith('/sigh-up') ||
-            url.pathname.startsWith('/verify')  ||
-            url.pathname.startsWith('/')
+            url.pathname.startsWith('/sign-in') ||
+            url.pathname.startsWith('/sign-up') ||
+            url.pathname.startsWith('/verify') 
         )
     ){
         return NextResponse.redirect(new URL("/dashboard", request.url));
