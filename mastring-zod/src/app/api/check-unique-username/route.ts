@@ -35,13 +35,13 @@ export async function GET(request:Request){
         if(existingVerifiedUser){
             return Response.json({
                 success:false,
-                message:"Username already taken please choose another"
+                message:"Username is already in use. Please try a different one."
             },{status:400})
         }
 
         return Response.json({
             success:true,
-            message:"Username is available..."
+            message:"This username is available."
         },{status:200})
 
     } catch (error) {
